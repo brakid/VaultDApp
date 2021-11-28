@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { BigNumber, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import { Ethereum } from './utils/types';
 import { Route, Routes } from 'react-router-dom';
 import Vault from './Vault';
 import { Link } from 'react-router-dom';
+import Home from './Home';
 
 const EXPECTED_NETWORK = 'maticmum';
 
@@ -12,8 +13,6 @@ export const EthereumContext = React.createContext<Ethereum>({ blockNumber: -1 }
 const App = () => {
   const [web3Provider, setWeb3Provider] = useState<ethers.providers.Web3Provider>();
   const [blockNumber, setBlockNumber] = useState<number>(-1);
-  const [address, setAddress] = useState<string>();
-  const [balance, setBalance] = useState<BigNumber>(BigNumber.from(0));
   const [error, setError] = useState<boolean>(false);
 
   useEffect(() => {
@@ -26,13 +25,8 @@ const App = () => {
 
         setWeb3Provider(web3Provider);
 
-        const address = await web3Provider.getSigner().getAddress();
-        setAddress(address);
-
         const blockNumber = await web3Provider.getBlockNumber();
         setBlockNumber(blockNumber);
-
-        setBalance(await web3Provider.getSigner().getBalance() || BigNumber.from(0));
 
         web3Provider.addListener('block', (blockNumber) => { setBlockNumber(blockNumber) });
         const network = await web3Provider.getNetwork();
@@ -66,10 +60,7 @@ const App = () => {
           <div>
             <Routes>
               <Route path="/" element={ 
-                <div>
-                  <p>Balance { ethers.utils.formatEther(balance) } MATIC</p>
-                  <p>Address: { address }</p>
-                </div> 
+                <Home />
               } />
               <Route path="/vault/:id" element={ 
                 <Vault /> 

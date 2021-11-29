@@ -1,20 +1,16 @@
 import { useContext, useEffect, useState } from 'react';
 import { EthereumContext } from './App';
 import { Ethereum, VaultTokenContract } from './utils/types';
-import { BigNumber, ethers } from 'ethers';
 import { getVaultTokenContract } from './utils/contracts';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const ethereumContext = useContext<Ethereum>(EthereumContext);
   const [vaultTokenContract, setVaultTokenContract] = useState<VaultTokenContract>();
-  const [balance, setBalance] = useState<BigNumber>(BigNumber.from(0));
-  const [address, setAddress] = useState<string>();
 
   useEffect(() => {
     const init = async () => {
       if (ethereumContext.web3Provider) {
-        setBalance(await ethereumContext.web3Provider.getSigner().getBalance());
-        setAddress(await ethereumContext.web3Provider.getSigner().getAddress());
         setVaultTokenContract(getVaultTokenContract(ethereumContext.web3Provider.getSigner()));
       }
     };
@@ -24,16 +20,15 @@ const Home = () => {
 
   return (
     <div>
-      <p>Balance { ethers.utils.formatEther(balance) } MATIC</p>
-      <p>Address: { address }</p>
-      <ul>
+      <h1 className='text-center text-xl'>All Vaults:</h1>
+      <ul className='grid grid-cols-1 sm:grid-cols-3 justify-items-center gap-4'>
         { vaultTokenContract?.tokenIds.map((id, index) => {
           return (
-            <p key={ index }><a href={ '/vault/' + id.toString() }>Vault { id.toString() }</a></p>
+            <li key={ index }><Link to={ '/vault/' + id.toString() }><button className='bg-yellow-300 hover:bg-yellow-400 text-black py-2 px-4 border-black border-2'>Vault { id.toString() }</button></Link></li>
           );
         }) }
       </ul>
-    </div> 
+    </div>
   );
 }
 

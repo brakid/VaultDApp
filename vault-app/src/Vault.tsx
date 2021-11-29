@@ -8,7 +8,7 @@ import { BigNumber } from 'ethers';
 const Vault = () => {
   const { id } = useParams<string>();
   const ethereumContext = useContext<Ethereum>(EthereumContext);
-  const [vaultTokenContract, setVaultTokenContract] = useState<VaultTokenContract>();
+  const [_, setVaultTokenContract] = useState<VaultTokenContract>();
   const [isOwner, setIsOwner] = useState<boolean>(false);
   
   useEffect(() => {
@@ -28,8 +28,9 @@ const Vault = () => {
 
   return (
     <div>
-      <p>Vault { JSON.stringify(id) }</p>
-      { isOwner && <p>You are the owner - open</p> }
+      <h1 className='text-center text-xl'>Vault { id }</h1>
+      { isOwner && <p className='shadow py-4 px-4 my-4 bg-green-100 text-green-700 border-black border-2'>You are the owner - open</p> }
+      { !!!isOwner && <p className='shadow py-4 px-4 my-4 bg-yellow-100 text-yellow-700 border-black border-2'>You are not the owner - closed</p> }
     </div>
   );
 }

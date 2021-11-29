@@ -1,4 +1,4 @@
-import { BigNumber, ethers } from "ethers";
+import { BigNumber, ethers } from 'ethers';
 
 export interface Ethereum {
   web3Provider?: ethers.providers.Web3Provider;

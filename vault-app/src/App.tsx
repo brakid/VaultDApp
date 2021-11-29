@@ -73,16 +73,16 @@ const App = () => {
     } catch (err) {
       const rpcError = err as RpcError;
       
-      if (rpcError.code === 4902) {
+      if (rpcError.code === 4902 || rpcError.code === -32603) {
         try {
           await web3Provider.jsonRpcFetchFunc(
               'wallet_addEthereumChain',
               [POLYGON_TESTNET]);
         } catch (err) {
-          setError('' + err);
+          setError(JSON.stringify(err));
         }
       } else {
-        setError('' + err);
+        setError(JSON.stringify(err));
       }
     }
   }

@@ -4,7 +4,7 @@ import { EthereumContext, Firebase, FirebaseContext } from './App';
 import { Ethereum, VaultTokenContract } from './utils/types';
 import { getVaultTokenContract } from './utils/contracts';
 import { BigNumber } from 'ethers';
-import { collection, query, getDocs, where, updateDoc } from 'firebase/firestore/lite';
+import { collection, query, getDocs, where, updateDoc, addDoc } from 'firebase/firestore/lite';
 
 const Vault = () => {
   const { id } = useParams<string>();
@@ -49,6 +49,13 @@ const Vault = () => {
         const data = vaultContent.docs[0].data();
         const newData = Object.assign({}, data, { data: vaultData });
         await updateDoc(ref, newData);
+      } else {
+        const data = { vault: id, data: vaultData };
+        await addDoc(vault, data);
+      }
+      const refreshedVaultContent = await getDocs(vaultQuery);
+      if (!!!refreshedVaultContent.empty) {
+        setVaultData(refreshedVaultContent.docs[0].data().data);
       }
     }
   }

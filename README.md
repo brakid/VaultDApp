@@ -13,10 +13,11 @@ Each vault stores data that the vault owner can access only. Access to the data 
 ![Access denied](./images/noaccess.png)
 
 ## Technologies used:
-* React JS with Typescript for the webapp
-* Tailwind CSS for styling the webapp
-* Solidity & Truffle for the Smart Contracts
-* Firebase for hosting and the database
-* Golang and Gin for the backend managing the database access
-* Ethereum client for Golang to validate the ownership and check the signatures of the system accessing the vault data
-* Polygon (Matic) Testnet to deploy and run the NFT Contract
+* [React JS with Typescript](https://create-react-app.dev/docs/getting-started#creating-a-typescript-app) for the webapp
+* [Tailwind CSS](https://tailwindcss.com/) for styling the webapp
+* [Solidity](https://soliditylang.org/) & [Truffle](https://trufflesuite.com/) for the Smart Contracts
+* [Golang](https://go.dev/) and [Gin Gonic](https://gin-gonic.com/) for the backend REST server managing the database access
+* [Ethereum client for Golang](https://geth.ethereum.org/) to validate the ownership and check the signatures of the system accessing the vault data
+* [Firebase](https://firebase.google.com/) for hosting the webapp and the database
+* [https://heroku.com/](Heroku) for hosting the backend as a [Docker](https://www.docker.com/) image
+* [Polygon (Matic)](https://polygon.technology/) Testnet as an EVM compatible blockchain to deploy and run the NFT Contract (ERC-721)

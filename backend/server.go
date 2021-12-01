@@ -72,8 +72,8 @@ func validateOwnership(address *common.Address, id int64, vaultToken *abi.Abi) (
 }
 
 func main() {
-	contractAddress := common.HexToAddress(utils.Get("CONTRACT_ADDRESS", "0xd9fdd544c7db7a69d87755cc702dee49e44c4857"))
-	ethereumAddress := utils.Get("ETHEREUM_ADDRESS", "https://rpc-mumbai.maticvigil.com/")
+	contractAddress := common.HexToAddress("0xd9fdd544c7db7a69d87755cc702dee49e44c4857")
+	ethereumAddress := "https://rpc-mumbai.maticvigil.com/"
 
 	client, err := ethclient.Dial(ethereumAddress)
 	if err != nil {
@@ -90,8 +90,7 @@ func main() {
 	}
 
 	ctx := context.Background()
-	sa := option.WithCredentialsFile("./credentials.json")
-	app, err := firebase.NewApp(ctx, nil, sa)
+	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsFile("./credentials.json"))
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -144,7 +143,7 @@ func main() {
 		log.Printf("%v", authentication)
 
 		vault := firestoreClient.Collection("vaultdata")
-		vaultDocuments := vault.Query.Where("vault", "==", strconv.FormatInt(id, 10)).Documents(ctx)
+		vaultDocuments := vault.Query.Where("vault", "==", idString).Documents(ctx)
 		document, err := vaultDocuments.Next()
 		var content string
 		if err != nil {
@@ -193,11 +192,11 @@ func main() {
 		log.Printf("%v", authenticationWithContent)
 
 		vault := firestoreClient.Collection("vaultdata")
-		vaultDocuments := vault.Query.Where("vault", "==", strconv.FormatInt(id, 10)).Documents(ctx)
+		vaultDocuments := vault.Query.Where("vault", "==", idString).Documents(ctx)
 		document, err := vaultDocuments.Next()
 		if err != nil {
 			data := make(map[string]string)
-			data["vault"] = strconv.FormatInt(id, 10)
+			data["vault"] = idString
 			data["data"] = authenticationWithContent.Content
 			document, _, err := vault.Add(ctx, data)
 			if err != nil {

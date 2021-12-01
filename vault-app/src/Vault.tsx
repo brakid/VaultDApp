@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { EthereumContext } from './App';
-import { Ethereum, VaultTokenContract } from './utils/types';
+import { Ethereum } from './utils/types';
 import { getVaultTokenContract } from './utils/contracts';
 import { BigNumber, utils } from 'ethers';
 
@@ -15,18 +15,17 @@ interface Authentication {
 const Vault = () => {
   const { id } = useParams<string>();
   const ethereumContext = useContext<Ethereum>(EthereumContext);
-  const [_, setVaultTokenContract] = useState<VaultTokenContract>();
   const [isOwner, setIsOwner] = useState<boolean>(false);
   const [vaultData, setVaultData] = useState<string>('');
   const [vaultOpen, setVaultOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
   
   useEffect(() => {
     const init = async () => {
       if (ethereumContext.web3Provider) {
         const vaultTokenContract = getVaultTokenContract(ethereumContext.web3Provider.getSigner());
-        setVaultTokenContract(vaultTokenContract);
-
+        
         const address = await ethereumContext.web3Provider.getSigner().getAddress();
         const owner = await vaultTokenContract.contract.ownerOf(BigNumber.from(id));
         const isOwner = owner === address
@@ -51,6 +50,7 @@ const Vault = () => {
   };
 
   const readVault = async () => {
+    setLoading(true);
     try {
       const authentication = await signMessage();
       const response = await fetch('http://localhost:8080/read/vault/' + id, {
@@ -60,6 +60,7 @@ const Vault = () => {
 
       if (response.status === 403) {
         setError('No access: you are not the owner of this vault');
+        setLoading(false);
         return;
       }
       
@@ -71,9 +72,11 @@ const Vault = () => {
     } catch(err) {
       setError(JSON.stringify(err));
     }
+    setLoading(false);
   };
 
   const writeVault = async () => {
+    setLoading(true);
     try {
       const authentication = await signMessage();
       const response = await fetch('http://localhost:8080/write/vault/' + id, {
@@ -85,6 +88,7 @@ const Vault = () => {
 
       if (response.status === 403) {
         setError('No access: you are not the owner of this vault');
+        setLoading(false);
         return;
       }
       
@@ -96,6 +100,7 @@ const Vault = () => {
     } catch(err) {
       setError(JSON.stringify(err));
     }
+    setLoading(false);
   };
 
   return (
@@ -108,10 +113,14 @@ const Vault = () => {
           }
           { error.length === 0 && <>
             <p className='py-4 px-4 my-4 bg-green-100 text-green-700 border-black border-2'>You are the owner - vault open</p>
-            { !!!vaultOpen && 
+            {
+              loading && 
+              <p className='py-4 px-4 my-4 bg-gray-100 text-gray-700 border-black border-2'>Loading...</p>
+            }
+            { !!!loading && !!!vaultOpen && 
               <button className='bg-yellow-300 hover:bg-yellow-400 text-black py-2 px-4 border-black border-2' onClick={ () => readVault() }>Read vault content</button>
             }
-            { vaultOpen && <>
+            { !!!loading && vaultOpen && <>
               <textarea className='p-2 border-black border-2' onChange={ (e) => setVaultData(e.target.value) } value={ vaultData } />
               <button className='bg-yellow-300 hover:bg-yellow-400 text-black py-2 px-4 border-black border-2' onClick={ () => writeVault() }>Save vault content</button>
             </>}

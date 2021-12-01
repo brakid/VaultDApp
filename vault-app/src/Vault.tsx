@@ -53,7 +53,7 @@ const Vault = () => {
     setLoading(true);
     try {
       const authentication = await signMessage();
-      const response = await fetch('http://localhost:8080/read/vault/' + id, {
+      const response = await fetch('https://brakid-vault.herokuapp.com/read/vault/' + id, {
         method: 'POST',
         body: JSON.stringify(authentication)
       });
@@ -79,7 +79,7 @@ const Vault = () => {
     setLoading(true);
     try {
       const authentication = await signMessage();
-      const response = await fetch('http://localhost:8080/write/vault/' + id, {
+      const response = await fetch('https://brakid-vault.herokuapp.com/write/vault/' + id, {
         method: 'POST',
         body: JSON.stringify({
           ...authentication, content: vaultData

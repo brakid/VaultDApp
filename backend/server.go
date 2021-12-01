@@ -9,6 +9,7 @@ import (
 	"math"
 	"math/big"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 
@@ -72,6 +73,12 @@ func validateOwnership(address *common.Address, id int64, vaultToken *abi.Abi) (
 }
 
 func main() {
+	port, present := os.LookupEnv("PORT")
+
+	if !present {
+		port = "8080"
+	}
+
 	contractAddress := common.HexToAddress("0xd9fdd544c7db7a69d87755cc702dee49e44c4857")
 	ethereumAddress := "https://rpc-mumbai.maticvigil.com/"
 
@@ -222,5 +229,5 @@ func main() {
 		context.JSON(http.StatusOK, authenticationWithContent.Content)
 	})
 
-	r.Run()
+	r.Run(":" + port)
 }

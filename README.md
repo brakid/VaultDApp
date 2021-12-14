@@ -6,7 +6,7 @@ Project URL: https://brakid-vault.web.app
 
 The Vault Token contract is deployed to the Polygon Testnetwork: https://mumbai.polygonscan.com/ under address: [0xd9fDD544c7db7a69D87755Cc702dEe49e44c4857](https://mumbai.polygonscan.com/token/0xd9fDD544c7db7a69D87755Cc702dEe49e44c4857)
 
-Each vault stores data that the vault owner can access only. Access to the data is managed by the backend system: to verify the ownership each read and write request needs to be accompanied with a [signature](https://medium.com/mycrypto/the-magic-of-digital-signatures-on-ethereum-98fe184dc9c7) provided by the wallet owning the NFT for the vault to open. This ensures that the call to read or write data is done by the NFT owner only (assuming the NFT owner does not give away the signature). To avoid using a signature repeatedly by unauthorized perticipants, each signature contains atimestamp that limits the validity of a message to 5 minutes.
+Each vault stores data that the vault owner can access only. Access to the data is managed by the backend system: to verify the ownership each read and write request needs to be accompanied with a [signature](https://medium.com/mycrypto/the-magic-of-digital-signatures-on-ethereum-98fe184dc9c7) provided by the wallet owning the NFT for the vault to open. This ensures that the call to read or write data is done by the NFT owner only (assuming the NFT owner does not give away the signature). To avoid using a signature repeatedly by unauthorized participants, each signature contains a timestamp that limits the validity of the signature message to 5 minutes.
 
 ![Access granted](./images/access.png)
 
